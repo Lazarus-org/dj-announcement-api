@@ -5,7 +5,7 @@ from django.db.models import (
 )
 from django.utils.translation import gettext_lazy as _
 
-from django_announcement.models.base import TimeStampedModel
+from django_announcement.models.mixins.timestamped_model import TimeStampedModel
 
 
 class Announcement(TimeStampedModel):
@@ -22,8 +22,6 @@ class Announcement(TimeStampedModel):
         published_at (DateTimeField, optional): The date and time when the announcement is published.
         expires_at (DateTimeField, optional): The date and time when the announcement expires.
         attachment (FileField, optional): A file attachment for the announcement (e.g., flyer).
-        created_at (DateTimeField): The timestamp when the announcement was created.
-        updated_at (DateTimeField): The timestamp when the announcement was last updated.
 
     Meta:
         db_table (str): The name of the database table.
@@ -57,6 +55,7 @@ class Announcement(TimeStampedModel):
     )
     audience = ManyToManyField(
         to="Audience",
+        through="AudienceAnnouncement",
         verbose_name=_("Audience"),
         help_text=_("The target audience for the announcement."),
         related_name="all_announcements",
