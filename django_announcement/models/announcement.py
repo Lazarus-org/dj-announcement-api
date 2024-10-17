@@ -6,6 +6,7 @@ from django.db.models import (
 from django.utils.translation import gettext_lazy as _
 
 from django_announcement.models.mixins.timestamped_model import TimeStampedModel
+from django_announcement.repository.manager.announcement import AnnouncementDataAccessLayer
 
 
 class Announcement(TimeStampedModel):
@@ -82,6 +83,8 @@ class Announcement(TimeStampedModel):
         blank=True,
         null=True,
     )
+
+    objects = AnnouncementDataAccessLayer()
 
     class Meta:
         db_table: str = "announcements"
