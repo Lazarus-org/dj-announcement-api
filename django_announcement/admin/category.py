@@ -2,9 +2,10 @@ from django.contrib.admin import register
 
 from django_announcement.mixins.admin.base import BaseModelAdmin
 from django_announcement.models import AnnouncementCategory
+from django_announcement.settings.conf import config
 
 
-@register(AnnouncementCategory)
+@register(AnnouncementCategory, site=config.admin_site_class)
 class AnnouncementCategoryAdmin(BaseModelAdmin):
     list_display = ["name", "created_at", "updated_at"]
     list_display_links = ["name"]

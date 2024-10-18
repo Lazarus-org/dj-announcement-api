@@ -2,11 +2,12 @@ from django.contrib.admin import register
 
 from django_announcement.mixins.admin.base import BaseModelAdmin
 from django_announcement.models.user_audience import UserAudience
+from django_announcement.settings.conf import config
 from django_announcement.utils.user_model import USERNAME_FIELD
 
 
 @register(UserAudience)
-class UserAudienceAdmin(BaseModelAdmin):
+class UserAudienceAdmin(BaseModelAdmin, site=config.admin_site_class):
     list_display = BaseModelAdmin.list_display + [
         f"user_announce_profile",
         "audience",

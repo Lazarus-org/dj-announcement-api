@@ -6,9 +6,10 @@ from django.utils.translation import gettext_lazy as _
 from django_announcement.admin.inlines import AudienceInline
 from django_announcement.mixins.admin.base import BaseModelAdmin
 from django_announcement.models import Announcement
+from django_announcement.settings.conf import config
 
 
-@register(Announcement)
+@register(Announcement, site=config.admin_site_class)
 class AnnouncementAdmin(BaseModelAdmin):
     autocomplete_fields = ["category"]
     inlines = [AudienceInline]
