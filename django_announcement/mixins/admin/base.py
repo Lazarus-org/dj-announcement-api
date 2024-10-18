@@ -2,9 +2,12 @@ from django.contrib.admin import ModelAdmin
 from django.utils.translation import gettext_lazy as _
 
 from django_announcement.mixins.admin.form_fields import ForeignKeyRawIdWidgetMixin
+from django_announcement.mixins.admin.permission import AdminPermissionControlMixin
 
 
-class BaseModelAdmin(ForeignKeyRawIdWidgetMixin, ModelAdmin):
+class BaseModelAdmin(
+    AdminPermissionControlMixin, ForeignKeyRawIdWidgetMixin, ModelAdmin
+):
     """Base class for all ModelAdmin classes in the Django admin interface.
 
     This class provides common functionalities and configurations that can
@@ -25,6 +28,7 @@ class BaseModelAdmin(ForeignKeyRawIdWidgetMixin, ModelAdmin):
         Subclass `BaseModelAdmin` to create custom admin interfaces for your models,
         inheriting the common configurations and functionalities provided by this base class.
     """
+
     list_display = ["id"]
     list_per_page = 10
     list_filter = ["created_at", "updated_at"]
