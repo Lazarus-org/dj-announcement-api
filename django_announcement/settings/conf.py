@@ -40,7 +40,6 @@ class AnnouncementConfig:
         admin_inline_has_add_permission (bool): Whether the inline admin has permission to add announcements.
         admin_inline_has_change_permission (bool): Whether the inline admin has permission to change announcements.
         admin_inline_has_delete_permission (bool): Whether the inline admin has permission to delete announcements.
-        admin_inline_has_module_permission (bool): Whether the inline admin has module-level permissions.
         admin_site_class (Optional[Type[Any]]): The class used for the admin site.
         generate_audiences_exclude_apps (List[str]): A list of apps excluded from audience generation.
         generate_audiences_exclude_models (List[str]): A list of models excluded from audience generation.
@@ -88,10 +87,6 @@ class AnnouncementConfig:
         self.admin_inline_has_delete_permission: bool = self.get_setting(
             f"{self.prefix}ADMIN_INLINE_HAS_DELETE_PERMISSION",
             self.default_admin_settings.admin_inline_has_delete_permission,
-        )
-        self.admin_inline_has_module_permission: bool = self.get_setting(
-            f"{self.prefix}ADMIN_INLINE_HAS_MODULE_PERMISSION",
-            self.default_admin_settings.admin_inline_has_module_permission,
         )
 
         self.include_serializer_full_details: bool = self.get_setting(
