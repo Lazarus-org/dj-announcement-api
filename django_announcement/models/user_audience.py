@@ -29,6 +29,3 @@ class UserAudience(TimeStampedModel):
         verbose_name = _("User Audience")
         verbose_name_plural = _("User Audiences")
         unique_together = ("user_announce_profile", "audience")
-
-    def __str__(self):
-        return f"{self.user_announce_profile} -> {self.audience.name}"
