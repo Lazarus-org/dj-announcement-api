@@ -5,10 +5,11 @@ from django.http import HttpRequest
 from django_announcement.admin.inlines import UserAudienceInline
 from django_announcement.mixins.admin.base import BaseModelAdmin
 from django_announcement.models import UserAnnouncementProfile
+from django_announcement.settings.conf import config
 from django_announcement.utils.user_model import USERNAME_FIELD
 
 
-@register(UserAnnouncementProfile)
+@register(UserAnnouncementProfile, site=config.admin_site_class)
 class UserAnnouncementProfileAdmin(BaseModelAdmin):
     autocomplete_fields = ["user", "audiences"]
     inlines = [UserAudienceInline]
