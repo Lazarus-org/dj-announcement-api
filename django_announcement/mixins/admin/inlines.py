@@ -3,9 +3,12 @@ from django.db.models import QuerySet
 from django.http import HttpRequest
 
 from django_announcement.mixins.admin.form_fields import ForeignKeyRawIdWidgetMixin
+from django_announcement.mixins.admin.permission import InlinePermissionControlMixin
 
 
-class BaseTabularInline(ForeignKeyRawIdWidgetMixin, TabularInline):
+class BaseTabularInline(
+    InlinePermissionControlMixin, ForeignKeyRawIdWidgetMixin, TabularInline
+):
     """Base tabular inline admin interface with common functionality for all inlines.
 
     This class serves as the foundation for all inlines. Any tabular inline can inherit from this

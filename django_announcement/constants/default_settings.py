@@ -25,7 +25,6 @@ class DefaultAdminSettings:
     admin_inline_has_add_permission: bool = True
     admin_inline_has_change_permission: bool = False
     admin_inline_has_delete_permission: bool = True
-    admin_inline_has_module_permission: bool = True
 
 
 @dataclass(frozen=True)
