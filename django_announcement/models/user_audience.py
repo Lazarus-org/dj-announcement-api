@@ -1,7 +1,7 @@
 from django.db.models import ForeignKey, CASCADE
 from django.utils.translation import gettext_lazy as _
 
-from django_announcement.models.mixins.timestamped_model import TimeStampedModel
+from django_announcement.mixins.models.timestamped_model import TimeStampedModel
 
 
 class UserAudience(TimeStampedModel):

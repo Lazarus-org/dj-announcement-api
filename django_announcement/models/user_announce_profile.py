@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db.models import OneToOneField, ManyToManyField, CASCADE
 from django.utils.translation import gettext_lazy as _
 
-from django_announcement.models.mixins.timestamped_model import TimeStampedModel
+from django_announcement.mixins.models.timestamped_model import TimeStampedModel
 from django_announcement.utils.user_model import get_username
 
 
