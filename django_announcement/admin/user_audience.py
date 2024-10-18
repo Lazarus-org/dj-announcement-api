@@ -6,8 +6,8 @@ from django_announcement.settings.conf import config
 from django_announcement.utils.user_model import USERNAME_FIELD
 
 
-@register(UserAudience)
-class UserAudienceAdmin(BaseModelAdmin, site=config.admin_site_class):
+@register(UserAudience, site=config.admin_site_class)
+class UserAudienceAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + [
         f"user_announce_profile",
         "audience",

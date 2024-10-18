@@ -34,7 +34,7 @@ class BaseAudienceInline(BaseTabularInline):
         autocomplete_fields: Fields that support autocomplete for admin.
     """
 
-    autocomplete_fields = ("audience",)
+    autocomplete_fields = ["audience"]
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         """Optimize the queryset by selecting related fields.
