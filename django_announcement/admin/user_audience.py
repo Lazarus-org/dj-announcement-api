@@ -9,7 +9,7 @@ from django_announcement.utils.user_model import USERNAME_FIELD
 @register(UserAudience, site=config.admin_site_class)
 class UserAudienceAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + [
-        f"user_announce_profile",
+        "user_announce_profile",
         "audience",
         "created_at",
     ]

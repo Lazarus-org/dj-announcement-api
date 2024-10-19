@@ -45,7 +45,4 @@ class AnnouncementFilter(FilterSet):
 
     def filter_not_expired(self, queryset, name, value):
         """Filter announcements that are not expired (i.e., expires_at is None or in the future)."""
-        if value:
-            return queryset.active()
-
-        return queryset
+        return queryset.active() if value else queryset
