@@ -38,11 +38,13 @@ class Command(BaseCommand):
 
             if user_input == "n":
                 self.stdout.write(
-                    self.style.WARNING("To exclude certain apps or models:")
+                    self.style.WARNING(
+                        "To exclude certain apps or models, modify the settings:"
+                    )
                 )
                 self.stdout.write(
-                    "1. Modify the 'GENERATE_AUDIENCES_EXCLUDE_APPS' and 'GENERATE_AUDIENCES_EXCLUDE_APPS'"
-                    " lists in the settings."
+                    "1. Adjust 'DJANGO_ANNOUNCEMENT_GENERATE_AUDIENCES_EXCLUDE_APPS' and"
+                    " 'DJANGO_ANNOUNCEMENT_GENERATE_AUDIENCES_EXCLUDE_MODELS'."
                 )
                 self.stdout.write(
                     "2. Re-run this command after adjusting the settings."
@@ -57,16 +59,34 @@ class Command(BaseCommand):
                     )
                 )
 
+        # Fetch existing audiences for the related models in bulk
+        model_names = [model._meta.verbose_name.title() for model in related_models]
+        existing_audiences = Audience.objects.filter(name__in=model_names).values_list(
+            "name", flat=True
+        )
+
+        audiences_to_create = []
         for model in related_models:
             model_name = model._meta.verbose_name.title()
-            audience, created = Audience.objects.get_or_create(
-                name=model_name,
-                defaults={"description": f"Auto-created audience for {model_name}"},
-            )
-            if created:
+            if model_name not in existing_audiences:
+                audiences_to_create.append(
+                    Audience(
+                        name=model_name,
+                        description=f"Auto-created audience for {model_name}",
+                    )
+                )
+
+        # Bulk create the new audiences
+        if audiences_to_create:
+            Audience.objects.bulk_create(audiences_to_create)
+            for audience in audiences_to_create:
                 self.stdout.write(
                     self.style.SUCCESS(f"Created audience: {audience.name}")
                 )
+        else:
+            self.stdout.write(
+                self.style.WARNING("No new audiences needed to be created.")
+            )
 
         self.stdout.write(self.style.SUCCESS("Finished creating audiences!"))
 
@@ -74,25 +94,30 @@ class Command(BaseCommand):
     def get_user_related_models() -> List:
         """Helper method to get models related to the user model."""
         user_related_models = []
+
+        exclude_apps = set(config.generate_audiences_exclude_apps)
+        exclude_models = set(config.generate_audiences_exclude_models)
+
         for model in apps.get_models():
             module_path = model.__module__
             app_label = model._meta.app_label
             model_name = model.__name__
 
-            exclude_apps = config.generate_audiences_exclude_apps
-            exclude_models = config.generate_audiences_exclude_models
-
             # Exclude specific apps or models provided
             if app_label in exclude_apps or model_name in exclude_models:
                 continue
+
             # Ignore models from 'django' and 'django_announcement' app
             if module_path.startswith("django.") or module_path.startswith(
                 "django_announcement."
             ):
                 continue
 
-            for field in model._meta.get_fields():
-                if field.is_relation and field.related_model == UserModel:
-                    user_related_models.append(model)
-                    break
+            # Check if the model has a relationship with the UserModel
+            if any(
+                field.is_relation and field.related_model == UserModel
+                for field in model._meta.get_fields()
+            ):
+                user_related_models.append(model)
+
         return user_related_models
