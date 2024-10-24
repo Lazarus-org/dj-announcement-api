@@ -68,6 +68,7 @@ def configure_django_settings() -> None:
                 "django.contrib.staticfiles",
                 "rest_framework",
                 "django_filters",
+                "django_migration_linter",
                 "django_announcement",
             ],
             MIDDLEWARE=[
