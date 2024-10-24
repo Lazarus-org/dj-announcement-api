@@ -115,14 +115,14 @@ def check_announcement_settings(app_configs: Any, **kwargs: Any) -> List[Error]:
         validate_list_fields(
             config.generate_audiences_exclude_apps,
             f"{config.prefix}GENERATE_AUDIENCES_EXCLUDE_APPS",
-            True
+            True,
         )
     )
     errors.extend(
         validate_list_fields(
             config.generate_audiences_exclude_models,
             f"{config.prefix}GENERATE_AUDIENCES_EXCLUDE_MODELS",
-            True
+            True,
         )
     )
     errors.extend(

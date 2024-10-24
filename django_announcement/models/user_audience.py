@@ -1,4 +1,4 @@
-from django.db.models import ForeignKey, CASCADE
+from django.db.models import CASCADE, ForeignKey
 from django.utils.translation import gettext_lazy as _
 
 from django_announcement.mixins.models.timestamped_model import TimeStampedModel
@@ -13,7 +13,7 @@ class UserAudience(TimeStampedModel):
         related_name="user_audiences",
         verbose_name=_("User Profile"),
         help_text=_("The user profile associated with the audience."),
-        db_comment="Foreign key to the UserAnnouncementProfile table."
+        db_comment="Foreign key to the UserAnnouncementProfile table.",
     )
     audience = ForeignKey(
         to="Audience",
@@ -21,7 +21,7 @@ class UserAudience(TimeStampedModel):
         related_name="audience_users",
         verbose_name=_("Audience"),
         help_text=_("The audience associated with the user profile."),
-        db_comment="Foreign key to the Audience table."
+        db_comment="Foreign key to the Audience table.",
     )
 
     class Meta:

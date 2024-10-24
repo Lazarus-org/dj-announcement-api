@@ -27,6 +27,7 @@ class BaseModelAdmin(
     Usage:
         Subclass `BaseModelAdmin` to create custom admin interfaces for your models,
         inheriting the common configurations and functionalities provided by this base class.
+
     """
 
     list_display = ["id"]

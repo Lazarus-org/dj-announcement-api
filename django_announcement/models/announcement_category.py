@@ -22,6 +22,7 @@ class AnnouncementCategory(TimeStampedModel):
     Methods:
         __str__() -> str:
             Returns a string representation of the announcement category.
+
     """
 
     name = CharField(
@@ -29,7 +30,7 @@ class AnnouncementCategory(TimeStampedModel):
         verbose_name=_("Category Name"),
         help_text=_("The name of the announcement category."),
         db_comment="The name of the announcement category, such as Conference or Webinar.",
-        unique=True
+        unique=True,
     )
     description = TextField(
         verbose_name=_("Description"),
@@ -49,5 +50,6 @@ class AnnouncementCategory(TimeStampedModel):
 
         Returns:
             str: A string representation of the announcement category.
+
         """
         return str(self.name)

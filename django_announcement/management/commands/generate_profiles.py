@@ -10,26 +10,27 @@ from django_announcement.utils.user_model import UserModel
 
 
 class Command(BaseCommand):
-    """
-    A Django management command to assign users to dynamically created audiences
-    using the UserAnnouncementProfile model. It ensures that users are associated
-    with audiences based on user-related models.
+    """A Django management command to assign users to dynamically created
+    audiences using the UserAnnouncementProfile model. It ensures that users
+    are associated with audiences based on user-related models.
 
     Attributes:
     ----------
         PROCEED_CONFIRMATION: A set of valid user inputs for confirmation.
+
     """
+
     help = "Assign users to the dynamically created audiences using UserAnnouncementProfile model."
 
     PROCEED_CONFIRMATION = {"yes", "y"}
 
     def add_arguments(self, parser):
-        """
-        Add optional arguments to the command parser.
+        """Add optional arguments to the command parser.
 
         Args:
         ----
             parser: The argument parser instance to which the arguments are added.
+
         """
         parser.add_argument(
             "--skip-confirmation",
@@ -39,14 +40,15 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args: str, **kwargs: Dict[str, str]) -> None:
-        """
-        Execute the command to assign users to audiences. It checks if the audience
-        generation command has been run and processes user assignments accordingly.
+        """Execute the command to assign users to audiences. It checks if the
+        audience generation command has been run and processes user assignments
+        accordingly.
 
         Args:
         ----
             *args: Additional positional arguments.
             **kwargs: Keyword arguments, including 'skip-confirmation' to bypass user confirmation.
+
         """
         if (
             not kwargs.get("skip_confirmation")
@@ -103,6 +105,7 @@ class Command(BaseCommand):
         Returns:
         -------
             bool: True if the user has confirmed running 'generate_audiences', False otherwise.
+
         """
         self.stdout.write(
             self.style.WARNING(
@@ -134,6 +137,7 @@ class Command(BaseCommand):
         Returns:
         -------
             Dict[str, Audience]: A mapping of audience names to Audience objects.
+
         """
         audience_names = [
             model._meta.verbose_name.title() for model in user_related_model_keys
@@ -159,6 +163,7 @@ class Command(BaseCommand):
         Returns:
         -------
             QuerySet: A QuerySet of related users.
+
         """
         user_filter = Q()
         for rel_name in user_related_model_values:
@@ -172,6 +177,7 @@ class Command(BaseCommand):
         Args:
         ----
             related_users QuerySet: A QuerySet of related users.
+
         """
         existing_profiles = UserAnnouncementProfile.objects.filter(
             user__in=related_users
@@ -203,6 +209,7 @@ class Command(BaseCommand):
         Returns:
         -------
             List[UserAudience]: A list of UserAudience assignments to be created.
+
         """
         user_profiles = UserAnnouncementProfile.objects.filter(user__in=related_users)
         profiles_dict = {profile.user_id: profile for profile in user_profiles}
@@ -246,6 +253,7 @@ class Command(BaseCommand):
         Args:
         ----
             audience_assignments (List[UserAudience]): A list of UserAudience assignments to create.
+
         """
         if audience_assignments:
             UserAudience.objects.bulk_create(

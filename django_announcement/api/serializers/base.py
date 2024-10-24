@@ -1,11 +1,14 @@
-from typing import Dict, Any
+from typing import Any, Dict
+
 from rest_framework.serializers import ModelSerializer
+
 from django_announcement.settings.conf import config
 from django_announcement.utils.serialization import filter_non_empty_fields
 
 
 class BaseFilteredSerializer(ModelSerializer):
-    """Base serializer that filters out empty fields from the representation."""
+    """Base serializer that filters out empty fields from the
+    representation."""
 
     def to_representation(self, instance: Any) -> Dict[str, Any]:
         """Convert the instance to a representation format, filtering out empty
@@ -16,6 +19,7 @@ class BaseFilteredSerializer(ModelSerializer):
 
         Returns:
             Dict[str, Any]: The filtered representation of the instance data.
+
         """
         data = super().to_representation(instance)
 

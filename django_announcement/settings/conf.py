@@ -6,10 +6,10 @@ from django.utils.module_loading import import_string
 from django_announcement.constants.default_settings import (
     DefaultAdminSettings,
     DefaultAPISettings,
+    DefaultCommandSettings,
     DefaultPaginationAndFilteringSettings,
     DefaultSerializerSettings,
     DefaultThrottleSettings,
-    DefaultCommandSettings,
 )
 
 
@@ -43,6 +43,7 @@ class AnnouncementConfig:
         admin_site_class (Optional[Type[Any]]): The class used for the admin site.
         generate_audiences_exclude_apps (List[str]): A list of apps excluded from audience generation.
         generate_audiences_exclude_models (List[str]): A list of models excluded from audience generation.
+
     """
 
     prefix = "DJANGO_ANNOUNCEMENT_"
