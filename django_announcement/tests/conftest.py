@@ -1,3 +1,4 @@
+from django_announcement.tests import setup
 from django_announcement.tests.fixtures import (
     admin_user,
     announce_profile_admin,
@@ -11,4 +12,3 @@ from django_announcement.tests.fixtures import (
     user,
     user_announcement_profile,
 )
-from django_announcement.tests.setup import configure_django_settings
