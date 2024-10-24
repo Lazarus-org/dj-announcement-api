@@ -71,6 +71,7 @@ codecov = "^2.1.13"
 python-semantic-release = "^9.8.8"
 django-migration-linter = "^5.1.0"
 poetry-plugin-export = "^1.8.0"
+django-filter = "^24.3"
 
 [tool.black]
 line-length = 88

@@ -28,6 +28,7 @@ cryptography==43.0.3 ; python_version >= "3.9" and python_version < "4.0" and sy
 decli==0.6.2 ; python_version >= "3.9" and python_version < "4.0"
 dill==0.3.9 ; python_version >= "3.9" and python_version < "4.0"
 distlib==0.3.9 ; python_version >= "3.9" and python_version < "4.0"
+django-filter==24.3 ; python_version >= "3.9" and python_version < "4.0"
 django-migration-linter==5.1.0 ; python_version >= "3.9" and python_version < "4.0"
 django-stubs-ext==5.1.0 ; python_version >= "3.9" and python_version < "4.0"
 django-stubs==5.1.0 ; python_version >= "3.9" and python_version < "4.0"
