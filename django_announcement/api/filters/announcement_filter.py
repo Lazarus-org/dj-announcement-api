@@ -1,5 +1,6 @@
 from django_filters import BooleanFilter
-from django_filters.rest_framework import FilterSet, DateTimeFromToRangeFilter
+from django_filters.rest_framework import DateTimeFromToRangeFilter, FilterSet
+
 from django_announcement.models.announcement import Announcement
 
 
@@ -44,5 +45,6 @@ class AnnouncementFilter(FilterSet):
         }
 
     def filter_not_expired(self, queryset, name, value):
-        """Filter announcements that are not expired (i.e., expires_at is None or in the future)."""
+        """Filter announcements that are not expired (i.e., expires_at is None
+        or in the future)."""
         return queryset.active() if value else queryset

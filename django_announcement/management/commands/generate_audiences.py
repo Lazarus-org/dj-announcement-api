@@ -8,28 +8,30 @@ from django_announcement.utils.user_model import UserModel
 
 
 class Command(BaseCommand):
-    """
-    A Django management command to dynamically create audiences based on models
-    related to the User model. It allows for filtering specific apps and models
-    through configuration settings and includes optional user confirmation.
+    """A Django management command to dynamically create audiences based on
+    models related to the User model. It allows for filtering specific apps and
+    models through configuration settings and includes optional user
+    confirmation.
 
     Attributes:
     ----------
         EXCLUDE_APPS_SETTING: List of apps to exclude from the audience generation process.
         EXCLUDE_MODELS_SETTING: List of models to exclude from the audience generation process.
+
     """
+
     help = "Dynamically create audiences based on models related to the User."
 
     EXCLUDE_APPS_SETTING = config.generate_audiences_exclude_apps
     EXCLUDE_MODELS_SETTING = config.generate_audiences_exclude_models
 
     def add_arguments(self, parser):
-        """
-        Add optional arguments to the command parser.
+        """Add optional arguments to the command parser.
 
         Args:
         ----
             parser: The argument parser instance to which the arguments are added.
+
         """
         parser.add_argument(
             "--skip-confirmation",
@@ -38,14 +40,15 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args: Tuple, **kwargs: Dict) -> None:
-        """
-        Main logic of the command. It retrieves user-related models, optionally
-        prompts for confirmation, and creates new audiences if necessary.
+        """Main logic of the command. It retrieves user-related models,
+        optionally prompts for confirmation, and creates new audiences if
+        necessary.
 
         Args:
         ----
             *args: Additional positional arguments.
             **kwargs: Keyword arguments, such as 'skip-confirmation' to bypass user confirmation.
+
         """
         related_models = self.get_user_related_models()
         related_model_keys = list(related_models.keys())
@@ -68,12 +71,13 @@ class Command(BaseCommand):
 
     @staticmethod
     def get_user_related_models() -> Dict:
-        """
-        Fetch user-related models, excluding apps and models defined in the settings.
+        """Fetch user-related models, excluding apps and models defined in the
+        settings.
 
         Returns:
         -------
             Dict: A dictionary of related models, excluding those specified in settings.
+
         """
         exclude_apps = set(Command.EXCLUDE_APPS_SETTING)
         exclude_models = set(Command.EXCLUDE_MODELS_SETTING)
@@ -91,12 +95,12 @@ class Command(BaseCommand):
         }
 
     def _print_related_models(self, related_models: List) -> None:
-        """
-        Print the list of related models for the user to review.
+        """Print the list of related models for the user to review.
 
         Args:
         ----
             related_models (List): A list of related models to be displayed.
+
         """
         self.stdout.write(
             self.style.WARNING("The following related models were found:")
@@ -105,12 +109,13 @@ class Command(BaseCommand):
             self.stdout.write(f"{i}. {model}")
 
     def _confirm_proceed(self) -> bool:
-        """
-        Prompt the user for confirmation to proceed with the audience creation.
+        """Prompt the user for confirmation to proceed with the audience
+        creation.
 
         Returns:
         -------
             bool: True if the user confirms, False otherwise.
+
         """
         while True:
             user_input = (
@@ -148,12 +153,13 @@ class Command(BaseCommand):
         self.stdout.write("3. Re-run this command after adjusting the settings.")
 
     def _create_audiences(self, related_models_list: List) -> None:
-        """
-        Create audiences based on the related models if they do not already exist.
+        """Create audiences based on the related models if they do not already
+        exist.
 
         Args:
         ----
             related_models_list (List): A list of related models for which to create audiences.
+
         """
         model_names = [
             model._meta.verbose_name.title() for model in related_models_list

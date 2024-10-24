@@ -22,6 +22,7 @@ class Audience(TimeStampedModel):
     Methods:
         __str__() -> str:
             Returns a string representation of the audience type.
+
     """
 
     name = CharField(
@@ -29,7 +30,7 @@ class Audience(TimeStampedModel):
         verbose_name=_("Audience Name"),
         help_text=_("The name of the audience type (e.g., Manager, Employee)."),
         db_comment="The name of the audience type.",
-        unique=True
+        unique=True,
     )
     description = CharField(
         max_length=255,

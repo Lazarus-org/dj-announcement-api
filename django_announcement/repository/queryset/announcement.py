@@ -1,4 +1,4 @@
-from django.db.models import QuerySet, Q
+from django.db.models import Q, QuerySet
 from django.utils.timezone import now
 
 from django_announcement.constants.types import Audiences, Categories
@@ -20,6 +20,7 @@ class AnnouncementQuerySet(QuerySet):
         expired(): Filters announcements that have already expired.
         by_audience(audience_id: int): Filters announcements by target audience ID.
         by_category(category_id: int): Filters announcements by category ID.
+
     """
 
     @property
@@ -28,16 +29,19 @@ class AnnouncementQuerySet(QuerySet):
 
         Returns:
             QuerySet: The queryset with related fields selected and prefetched.
+
         """
         return self.select_related(
             "category",
         ).prefetch_related("audience")
 
     def active(self) -> QuerySet:
-        """Filter announcements that are currently active (published and not expired).
+        """Filter announcements that are currently active (published and not
+        expired).
 
         Returns:
             QuerySet: A queryset containing active announcements.
+
         """
         _now = now()
         return self._join.filter(
@@ -46,10 +50,12 @@ class AnnouncementQuerySet(QuerySet):
         )
 
     def upcoming(self) -> QuerySet:
-        """Filter announcements that are scheduled to be published in the future.
+        """Filter announcements that are scheduled to be published in the
+        future.
 
         Returns:
             QuerySet: A queryset containing announcements with a future publication date.
+
         """
         return self._join.filter(published_at__gt=now())
 
@@ -58,6 +64,7 @@ class AnnouncementQuerySet(QuerySet):
 
         Returns:
             QuerySet: A queryset containing expired announcements.
+
         """
         return self._join.filter(expires_at__lt=now())
 
@@ -70,6 +77,7 @@ class AnnouncementQuerySet(QuerySet):
 
         Returns:
             QuerySet: A queryset containing announcements for the specified audience(s).
+
         """
         if isinstance(audiences, (int, Audience)):
             audiences = [audiences]
@@ -85,6 +93,7 @@ class AnnouncementQuerySet(QuerySet):
 
         Returns:
             QuerySet: A queryset containing announcements in the specified category(s).
+
         """
         if isinstance(categories, (int, AnnouncementCategory)):
             categories = [categories]

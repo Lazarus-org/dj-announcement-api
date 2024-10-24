@@ -1,25 +1,25 @@
-from django.db.models import QuerySet
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
-from rest_framework.filters import OrderingFilter, SearchFilter
+from typing import List, Type
 
-from django_announcement.mixins.config_api_attrs import ConfigureAttrsMixin
-from django_announcement.mixins.control_api_methods import ControlAPIMethodsMixin
-from django_announcement.models.announcement import Announcement
+from django.db.models import QuerySet
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.serializers import Serializer
+from rest_framework.viewsets import GenericViewSet
+
 from django_announcement.api.serializers.announcement import (
     AnnouncementSerializer,
     SimpleAnnouncementSerializer,
 )
-from typing import List, Type
-from rest_framework.serializers import Serializer
-
+from django_announcement.mixins.config_api_attrs import ConfigureAttrsMixin
+from django_announcement.mixins.control_api_methods import ControlAPIMethodsMixin
+from django_announcement.models.announcement import Announcement
 from django_announcement.settings.conf import config
 
 try:
     from django_filters.rest_framework import DjangoFilterBackend
 
     django_filter_installed = True
-except ImportError:
+except ImportError:  # pragma: no cover
     django_filter_installed = False
 
 
@@ -30,8 +30,7 @@ class AnnouncementViewSet(
     ControlAPIMethodsMixin,
     ConfigureAttrsMixin,
 ):
-    """
-    API ViewSet for managing announcements.
+    """API ViewSet for managing announcements.
 
     Provides list and retrieve operations for announcements, dynamically adjusting
     the level of announcement detail based on the user's role or system configuration.
@@ -52,6 +51,7 @@ class AnnouncementViewSet(
 
     Permissions:
     - Only authenticated users with proper permissions can interact with announcements.
+
     """
 
     filter_backends: List = [
@@ -79,11 +79,12 @@ class AnnouncementViewSet(
             self.disable_methods(["RETRIEVE"])
 
     def get_serializer_class(self) -> Type[Serializer]:
-        """
-        Get the appropriate serializer class based on the user's role and configuration.
+        """Get the appropriate serializer class based on the user's role and
+        configuration.
 
         Returns:
             Type[Serializer]: The serializer class to use for the current request.
+
         """
         if self.request.user.is_staff or config.include_serializer_full_details:
             return AnnouncementSerializer
@@ -101,11 +102,12 @@ class AnnouncementViewSet(
         return Announcement.objects.all()
 
     def get_queryset(self) -> QuerySet:
-        """
-        Get the queryset of available announcements based on user's audiences.
+        """Get the queryset of available announcements based on user's
+        audiences.
 
         Returns:
             QuerySet: A queryset of announcements suitable for the current user.
+
         """
         if self.request.user.is_staff:
             return self.get_staff_queryset()

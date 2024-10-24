@@ -1,12 +1,21 @@
 from typing import List
 
 from django.db.models import (
-    CASCADE, DateTimeField, ForeignKey, CharField, TextField, FileField, Index, ManyToManyField
+    CASCADE,
+    CharField,
+    DateTimeField,
+    FileField,
+    ForeignKey,
+    Index,
+    ManyToManyField,
+    TextField,
 )
 from django.utils.translation import gettext_lazy as _
 
 from django_announcement.mixins.models.timestamped_model import TimeStampedModel
-from django_announcement.repository.manager.announcement import AnnouncementDataAccessLayer
+from django_announcement.repository.manager.announcement import (
+    AnnouncementDataAccessLayer,
+)
 
 
 class Announcement(TimeStampedModel):
@@ -33,18 +42,19 @@ class Announcement(TimeStampedModel):
     Methods:
         __str__() -> str:
             Returns a string representation of the announcement including the title.
+
     """
 
     title = CharField(
         max_length=255,
         verbose_name=_("Title"),
         help_text=_("The title of the announcement."),
-        db_comment="The main title of the announcement."
+        db_comment="The main title of the announcement.",
     )
     content = TextField(
         verbose_name=_("Content"),
         help_text=_("The content or description of the announcement."),
-        db_comment="Detailed content or description of the announcement."
+        db_comment="Detailed content or description of the announcement.",
     )
     category = ForeignKey(
         to="AnnouncementCategory",
@@ -99,5 +109,6 @@ class Announcement(TimeStampedModel):
 
         Returns:
             str: A string representation of the announcement including the title.
+
         """
         return str(self.title)

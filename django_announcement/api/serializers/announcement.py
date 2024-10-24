@@ -5,7 +5,8 @@ from django_announcement.models.announcement import Announcement
 
 
 class AnnouncementSerializer(BaseFilteredSerializer):
-    """Serializer for detailed event data, used for staff users or detailed responses."""
+    """Serializer for detailed event data, used for staff users or detailed
+    responses."""
 
     category = AnnouncementCategorySerializer(read_only=True)
     audience = AudienceSerializer(many=True, read_only=True)

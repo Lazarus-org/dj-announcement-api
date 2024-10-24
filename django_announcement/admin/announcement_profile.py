@@ -55,6 +55,7 @@ class UserAnnouncementProfileAdmin(BaseModelAdmin):
 
         Returns:
             str: The username of the user if available; otherwise, returns an empty string.
+
         """
         return get_username(obj.user) if obj.user else ""
 

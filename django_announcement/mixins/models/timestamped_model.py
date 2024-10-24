@@ -1,4 +1,4 @@
-from django.db.models import Model, DateTimeField
+from django.db.models import DateTimeField, Model
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -8,6 +8,7 @@ class TimeStampedModel(Model):
 
     Any model that inherits from this class will automatically have the
     created_at and updated_at fields.
+
     """
 
     created_at = DateTimeField(

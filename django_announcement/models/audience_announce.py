@@ -1,11 +1,12 @@
-from django.db.models import ForeignKey, CASCADE
+from django.db.models import CASCADE, ForeignKey
 from django.utils.translation import gettext_lazy as _
 
 from django_announcement.mixins.models.timestamped_model import TimeStampedModel
 
 
 class AudienceAnnouncement(TimeStampedModel):
-    """Through model to manage the relationship between Announcements and Audiences."""
+    """Through model to manage the relationship between Announcements and
+    Audiences."""
 
     announcement = ForeignKey(
         to="Announcement",

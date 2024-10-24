@@ -1,16 +1,19 @@
+from typing import Any, Optional
+
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget
-from typing import Optional, Any
-from django.http import HttpRequest
 from django.db.models import ForeignKey
+from django.http import HttpRequest
 
 
 class ForeignKeyRawIdWidgetMixin:
-    """A mixin to override form field for foreign keys to use ForeignKeyRawIdWidget."""
+    """A mixin to override form field for foreign keys to use
+    ForeignKeyRawIdWidget."""
 
     def formfield_for_foreignkey(
         self, db_field: ForeignKey, request: HttpRequest, **kwargs: Any
     ) -> Optional[Any]:
-        """Override the default form field for foreign keys to use ForeignKeyRawIdWidget."""
+        """Override the default form field for foreign keys to use
+        ForeignKeyRawIdWidget."""
         # Assign ForeignKeyRawIdWidget to the widget option
         kwargs.setdefault(
             "widget",

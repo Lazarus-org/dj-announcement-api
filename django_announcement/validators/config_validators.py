@@ -20,9 +20,7 @@ def validate_boolean_setting(value: bool, config_name: str) -> List[Error]:
 
 
 def validate_list_fields(
-    fields: List[str],
-    config_name: str,
-    allow_empty: bool = False
+    fields: List[str], config_name: str, allow_empty: bool = False
 ) -> List[Error]:
     errors = []
     if not isinstance(fields, list):
