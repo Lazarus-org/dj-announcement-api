@@ -1,3 +1,7 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = [ "poetry-core" ]
+
 [tool.poetry]
 name = "dj-announcement-api"
 version = "0.1.0"
@@ -5,6 +9,38 @@ description = ""
 authors = [ "ARYAN-NIKNEZHAD <aryan513966@gmail.com>", "MEHRSHAD-MIRSHEKARY <mehrshad_mirshekary@email.com>" ]
 license = "MIT"
 readme = "README.md"
+keywords = [ "django_announcement", "django", "announcement", "dj-announcement-api" ]
+
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+  "Framework :: Django :: 5.1",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+packages = [
+  { include = "django_announcement" },
+]
+
+[tool.poetry.urls]
+"Documentation" = "https://dj-announcement-api.readthedocs.io"
+"Source Code" = "https://github.com/Lazarus-org/dj-announcement-api"
+"Changelog" = "https://github.com/lazarus-org/dj-announcement-api/blob/main/CHANGELOG.md"
+"Issues" = "https://github.com/lazarus-org/dj-announcement-api/issues"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
@@ -34,6 +70,7 @@ docformatter = "^1.7.5"
 codecov = "^2.1.13"
 python-semantic-release = "^9.8.8"
 django-migration-linter = "^5.1.0"
+poetry-plugin-export = "^1.8.0"
 
 [tool.black]
 line-length = 88
@@ -90,6 +127,7 @@ disable = [
   "W0611", # Unused imports
   "W0613", # Unused arguments
   "W0622", # Redefining built-in names
+  "W0718", # Catching too general exception
   "R0903", # Too few public methods
   "R0801", # Duplicate code
   "W0621",
@@ -99,6 +137,7 @@ disable = [
   "R0401",
 ]
 max-line-length = 88
+max-parents = 10
 ignore = [
   "tests",
   "migrations/*",
@@ -132,6 +171,32 @@ module-rgx = "(([a-z_][a-z0-9_]*)|(__.*__))$"
 python_files = [ "tests.py", "test_*.py" ]
 testpaths = [ "django_announcement/tests" ]
 addopts = "--cov --cov-report=term-missing --cov-report=html --cov-fail-under=90"
+markers = [
+  "models: Marks tests related to all database models in the project.",
+  "models_announcement: Marks tests for the Announcement model, including creation and model-specific methods.",
+  "models_category: Marks tests related to the AnnouncementCategory model.",
+  "models_announcement_profile: Marks tests for the UserAnnouncementProfile model.",
+  "models_audience: Marks tests related to the Audience model.",
+  "admin: Marks tests for Django admin functionalities, including access, rendering, and configurations.",
+  "admin_announcement: Marks tests for managing announcements in the Django admin, such as listing, filtering, and so on.",
+  "admin_announcement_profile: Marks tests for managing announcement profiles in the Django admin",
+  "admin_inlines: Marks tests for managing admin inlines in the project.",
+  "api: Marks tests related to the Django REST Framework (DRF) API as a whole.",
+  "api_views: Marks tests for DRF views, covering endpoints, request handling, and response generation.",
+  "api_views_announcement: Marks tests for views handling announcement-related API operations, such as listing announcements.",
+  "api_paginations: Marks tests for pagination in the API, ensuring correct behavior of paginated responses across various endpoints.",
+  "api_throttlings: Marks tests for DRF throttling mechanisms, ensuring the correct limiting of API requests.",
+  "settings: Marks tests for settings and configurations in the project.",
+  "settings_conf: Marks tests related to loading project-specific settings and configurations.",
+  "settings_checks: Marks tests for settings validation, ensuring that required settings are correctly configured.",
+  "validators: Marks tests for custom validators used throughout the project.",
+  "config_validators: Marks tests for configuration validators that validate the config values in project settings.",
+  "commands: Tests for Django management commands in the package.",
+  "commands_generate_audiences: Tests focused on the `generate_audienes` management command.",
+  "commands_generate_profiles: Tests for the command that generates announcement profiles based on generated audiences.",
+  "queryset: Marks tests for custom querysets, ensuring they perform for filtering and querying the database.",
+  "queryset_announcement: Marks tests for custom queryset class for Announcment used in the project.",
+]
 
 norecursedirs = [
   "migrations",
@@ -262,8 +327,3 @@ upload_to_vcs_release = true
 [tool.django_migration_linter]
 exclude_migration_tests = [ "NOT_NULL", "ADD_UNIQUE" ]
 no_cache = true
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
