@@ -55,8 +55,10 @@ Welcome to dj-announcement-api Documentation!
 
 |br|
 
-The `dj-announcement-api` is a powerful Django package designed to streamline the management and distribution of announcements at the API level. With this package, users can create rich, categorized announcements and target specific audiences, while also setting precise publication and expiration dates
+The `dj-announcement-api <https://github.com/lazarus-org/dj-announcement-api/>`_ is a versatile Django package developed by Lazarus to simplify the management and distribution of announcements via a robust API.
 
+The package allows users to create and manage detailed, categorized announcements, target specific audiences, and schedule announcements with customizable publication and expiration dates.
+It offers flexibility, scalability, and performance optimizations, making it ideal for dynamic needs in modern Django applications.
 
 Supported Versions
 ------------------
