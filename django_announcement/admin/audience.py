@@ -9,7 +9,6 @@ from django_announcement.settings.conf import config
 class AudienceAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + ["name", "created_at", "updated_at"]
     list_display_links = ["name"]
-    list_filter = BaseModelAdmin.list_filter + ["updated_at"]
     search_fields = BaseModelAdmin.search_fields + ["name", "description"]
     fieldsets = [
         (
