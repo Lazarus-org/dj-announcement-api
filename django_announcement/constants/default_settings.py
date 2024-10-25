@@ -3,6 +3,12 @@ from typing import List, Optional
 
 
 @dataclass(frozen=True)
+class DefaultAttachmentSettings:
+    validators: Optional[List] = None
+    upload_path: str = "announcement_attachments/"
+
+
+@dataclass(frozen=True)
 class DefaultCommandSettings:
     generate_audiences_exclude_apps: List[str] = field(default_factory=lambda: [])
     generate_audiences_exclude_models: List[str] = field(default_factory=lambda: [])

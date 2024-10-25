@@ -1,3 +1,4 @@
+from re import match
 from typing import List
 
 from django.core.checks import Error
@@ -109,13 +110,14 @@ def validate_throttle_rate(rate: str, setting_name: str) -> List[Error]:
     return errors
 
 
-def validate_optional_class_setting(
+def validate_optional_path_setting(
     setting_value: str, setting_name: str
 ) -> List[Error]:
-    """Validate that the setting is a valid class path and can be imported.
+    """Validate that the setting is a valid method or class path and can be
+    imported.
 
     Args:
-        setting_value (str): The value of the setting to validate, typically a class path.
+        setting_value (str): The value of the setting to validate, typically a method or class path.
         setting_name (str): The name of the setting being validated (for error reporting).
 
     Returns:
@@ -131,8 +133,9 @@ def validate_optional_class_setting(
     if not isinstance(setting_value, str):
         errors.append(
             Error(
-                f"The setting '{setting_name}' must be a valid string representing a class path.",
-                hint=f"Ensure '{setting_name}' is set to a string (e.g., 'myapp.module.MyClass').",
+                f"The setting '{setting_name}' must be a valid string representing a method or class path.",
+                hint=f"Ensure '{setting_name}' is set to a string (e.g., 'myapp.module.MyClass',"
+                " myapp.module.my_method).",
                 id=f"django_announcement.E009_{setting_name}",
             )
         )
@@ -144,8 +147,8 @@ def validate_optional_class_setting(
     except ImportError:
         errors.append(
             Error(
-                f"Cannot import the class from the setting '{setting_name}'.",
-                hint=f"Ensure the class path '{setting_value}' is valid and importable.",
+                f"Cannot import any method or class from the setting '{setting_name}'.",
+                hint=f"Ensure the path '{setting_value}' is valid and importable.",
                 id=f"django_announcement.E010_{setting_name}",
             )
         )
@@ -153,14 +156,14 @@ def validate_optional_class_setting(
     return errors
 
 
-def validate_optional_classes_setting(
+def validate_optional_paths_setting(
     setting_value: List[str], setting_name: str
 ) -> List[Error]:
-    """Validate that the setting value is a list of class paths and ensure that
-    they can be imported.
+    """Validate that the setting value is a list of paths and ensure that they
+    can be imported.
 
     Args:
-        setting_value (List[str]): The setting value to validate, typically a list of class paths.
+        setting_value (List[str]): The setting value to validate, typically a list of method or class paths.
         setting_name (str): The name of the setting being validated (for error reporting).
 
     Returns:
@@ -177,7 +180,7 @@ def validate_optional_classes_setting(
         errors.append(
             Error(
                 f"Invalid type for setting '{setting_name}'.",
-                hint="The setting must be either a list of strings. (e.g., ['myapp.module.MyClass'])",
+                hint="The setting must be either a list of strings.",
                 id=f"django_announcement.E011_{setting_name}",
             )
         )
@@ -188,22 +191,48 @@ def validate_optional_classes_setting(
         if not isinstance(path, str):
             errors.append(
                 Error(
-                    f"Invalid type for class path in '{setting_name}'.",
-                    hint="Each item in the list must be a valid string representing a class path.",
+                    f"Invalid type for path in '{setting_name}'.",
+                    hint="Each item in the list must be a valid string representing a path.",
                     id=f"django_announcement.E012_{setting_name}",
                 )
             )
         else:
-            # Attempt to import the class from the given path
+            # Attempt to import the method or path from the given path
             try:
                 import_string(path)
             except ImportError:
                 errors.append(
                     Error(
-                        f"Cannot import the class from '{path}' in setting '{setting_name}'.",
-                        hint=f"Ensure that '{path}' is a valid importable class path.",
+                        f"Cannot import the path from '{path}' in setting '{setting_name}'.",
+                        hint=f"Ensure that '{path}' is a valid importable path.",
                         id=f"django_announcement.E013_{setting_name}",
                     )
                 )
+
+    return errors
+
+
+def validate_upload_path_setting(path: str, setting_name: str) -> List[Error]:
+    """Validate that the upload path is a proper string and follows a basic
+    path structure.
+
+    Args:
+        path (str): The upload path to validate.
+        setting_name (str): The name of the setting being validated.
+
+    Returns:
+        List[Error]: A list of validation errors if invalid, or an empty list if valid.
+
+    """
+    errors = []
+
+    if not isinstance(path, str) or not path:
+        errors.append(
+            Error(
+                f"{setting_name} must be a non-empty string.",
+                hint="Ensure the upload path is provided as a non-empty string (e.g., 'uploads/announcements/').",
+                id=f"django_announcement.E014_{setting_name}",
+            )
+        )
 
     return errors

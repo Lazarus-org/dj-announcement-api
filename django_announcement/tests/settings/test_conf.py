@@ -21,7 +21,7 @@ class TestNotificationConfig:
 
     def test_import_error_handling(self) -> None:
         """
-        Test that `get_optional_classes` handles ImportError and returns None when an invalid class path is provided.
+        Test that `get_optional_paths` handles ImportError and returns None when an invalid path is provided.
 
         Args:
         ----
@@ -29,21 +29,21 @@ class TestNotificationConfig:
 
         Asserts:
         -------
-            The result of `get_optional_classes` should be None when ImportError is raised.
+            The result of `get_optional_paths` should be None when ImportError is raised.
         """
         config = AnnouncementConfig()
 
         with patch(
             "django.utils.module_loading.import_string", side_effect=ImportError
         ):
-            result = config.get_optional_classes(
+            result = config.get_optional_paths(
                 "INVALID_SETTING", "invalid.path.ClassName"
             )
             assert result is None
 
     def test_invalid_class_path_handling(self) -> None:
         """
-        Test that `get_optional_classes` returns None when an invalid class path is given (non-string).
+        Test that `get_optional_classes` returns None when an invalid path is given (non-string).
 
         Args:
         ----
@@ -51,11 +51,11 @@ class TestNotificationConfig:
 
         Asserts:
         -------
-            The result of `get_optional_classes` should be None when a non-string path is provided.
+            The result of `get_optional_paths` should be None when a non-string path is provided.
         """
         config = AnnouncementConfig()
-        result = config.get_optional_classes("INVALID_SETTING", None)
+        result = config.get_optional_paths("INVALID_SETTING", None)
         assert result is None
 
-        result = config.get_optional_classes("INVALID_SETTING", ["INVALID_PATH"])
+        result = config.get_optional_paths("INVALID_SETTING", ["INVALID_PATH"])
         assert not result

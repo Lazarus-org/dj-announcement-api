@@ -6,9 +6,10 @@ from django_announcement.settings.conf import config
 from django_announcement.validators.config_validators import (
     validate_boolean_setting,
     validate_list_fields,
-    validate_optional_class_setting,
-    validate_optional_classes_setting,
+    validate_optional_path_setting,
+    validate_optional_paths_setting,
     validate_throttle_rate,
+    validate_upload_path_setting,
 )
 
 
@@ -102,6 +103,11 @@ def check_announcement_settings(app_configs: Any, **kwargs: Any) -> List[Error]:
         )
     )
     errors.extend(
+        validate_upload_path_setting(
+            config.attachment_upload_path, f"{config.prefix}ATTACHMENT_UPLOAD_PATH"
+        )
+    )
+    errors.extend(
         validate_list_fields(
             config.api_ordering_fields, f"{config.prefix}API_ORDERING_FIELDS"
         )
@@ -138,37 +144,43 @@ def check_announcement_settings(app_configs: Any, **kwargs: Any) -> List[Error]:
         )
     )
     errors.extend(
-        validate_optional_class_setting(
+        validate_optional_path_setting(
             config.get_setting(f"{config.prefix}API_THROTTLE_CLASS", None),
             f"{config.prefix}API_THROTTLE_CLASS",
         )
     )
     errors.extend(
-        validate_optional_class_setting(
+        validate_optional_path_setting(
             config.get_setting(f"{config.prefix}API_PAGINATION_CLASS", None),
             f"{config.prefix}API_PAGINATION_CLASS",
         )
     )
     errors.extend(
-        validate_optional_classes_setting(
+        validate_optional_paths_setting(
             config.get_setting(f"{config.prefix}API_PARSER_CLASSES", []),
             f"{config.prefix}API_PARSER_CLASSES",
         )
     )
     errors.extend(
-        validate_optional_class_setting(
+        validate_optional_paths_setting(
+            config.get_setting(f"{config.prefix}ATTACHMENT_VALIDATORS", []),
+            f"{config.prefix}ATTACHMENT_VALIDATORS",
+        )
+    )
+    errors.extend(
+        validate_optional_path_setting(
             config.get_setting(f"{config.prefix}API_FILTERSET_CLASS", None),
             f"{config.prefix}API_FILTERSET_CLASS",
         )
     )
     errors.extend(
-        validate_optional_class_setting(
+        validate_optional_path_setting(
             config.get_setting(f"{config.prefix}API_EXTRA_PERMISSION_CLASS", None),
             f"{config.prefix}API_EXTRA_PERMISSION_CLASS",
         )
     )
     errors.extend(
-        validate_optional_class_setting(
+        validate_optional_path_setting(
             config.get_setting(f"{config.prefix}ADMIN_SITE_CLASS", None),
             f"{config.prefix}ADMIN_SITE_CLASS",
         )

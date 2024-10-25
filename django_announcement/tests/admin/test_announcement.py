@@ -141,9 +141,9 @@ class TestAnnouncementAdmin:
             (
                 None,
                 {
-                    "fields": ("title", "content", "category"),
+                    "fields": ("title", "content", "category", "attachment"),
                     "description": "Primary fields related to the announcement,"
-                    " including the title, content, and category.",
+                    " including the title, content, category and attachment.",
                 },
             ),
             (
