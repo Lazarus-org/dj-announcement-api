@@ -117,7 +117,7 @@ The admin permissions for ``add``, ``change``, and ``delete`` actions and also `
 - ``DJANGO_ANNOUNCEMENT_ADMIN_HAS_MODULE_PERMISSION``: Determines whether a user has access to the admin management module, including all its features and functionality. Defaults to ``True``.
 
 
-The admin permissions for ``add``, ``change``, and ``delete`` actions can be controlled through the following Django settings:
+The admin inline permissions for ``add``, ``change``, and ``delete`` actions can be controlled through the following Django settings:
 
 - ``DJANGO_ANNOUNCEMENT_ADMIN_INLINE_HAS_ADD_PERMISSION``: Controls whether the "add" action is available in the AudienceInline and UserAudienceInline Admin. Defaults to ``True``.
 
@@ -353,7 +353,7 @@ The ``all`` method retrieves all announcements from the database.
 
 .. code-block:: python
 
-    from django_announcement.models.announcement import Announcement
+    from django_announcement.models import Announcement
 
     Announcement.objects.all()
 
@@ -367,7 +367,7 @@ To retrieve all announcements:
 
 .. code-block:: python
 
-    from django_announcement.models.announcement import Announcement
+    from django_announcement.models import Announcement
 
     all_announcements = Announcement.objects.all()
 
@@ -381,7 +381,7 @@ The ``active`` method retrieves only the announcements that are currently active
 
 .. code-block:: python
 
-    from django_announcement.models.announcement import Announcement
+    from django_announcement.models import Announcement
 
     Announcement.objects.active()
 
@@ -395,6 +395,8 @@ To retrieve all active announcements:
 
 .. code-block:: python
 
+    from django_announcement.models import Announcement
+
     active_announcements = Announcement.objects.active()
 
 
@@ -407,7 +409,7 @@ The ``upcoming`` method retrieves announcements that are scheduled to be publish
 
 .. code-block:: python
 
-    from django_announcement.models.announcement import Announcement
+    from django_announcement.models import Announcement
 
     Announcement.objects.upcoming()
 
@@ -421,6 +423,8 @@ To retrieve all upcoming announcements:
 
 .. code-block:: python
 
+    from django_announcement.models import Announcement
+
     upcoming_announcements = Announcement.objects.upcoming()
 
 
@@ -433,7 +437,7 @@ The ``expired`` method retrieves announcements that have already expired.
 
 .. code-block:: python
 
-    from django_announcement.models.announcement import Announcement
+    from django_announcement.models import Announcement
 
     Announcement.objects.expired()
 
@@ -447,6 +451,8 @@ To retrieve all expired announcements:
 
 .. code-block:: python
 
+    from django_announcement.models import Announcement
+
     expired_announcements = Announcement.objects.expired()
 
 
@@ -459,9 +465,9 @@ The ``get_by_audience`` method retrieves announcements targeted at specific audi
 
 .. code-block:: python
 
-    from django_announcement.models.announcement import Announcement
+    from django_announcement.models import Announcement, Audience
 
-
+    audiences = Audience.objects.filter(name__icontains="manager")
     Announcement.objects.get_by_audience(audiences)
 
 **Arguments:**
@@ -479,6 +485,8 @@ To retrieve announcements for a specific audience:
 
 .. code-block:: python
 
+    from django_announcement.models import Announcement, Audience
+
     specific_audience = Audience.objects.get(id=1)
     audience_announcements = Announcement.objects.get_by_audience(specific_audience)
 
@@ -492,9 +500,9 @@ The ``get_by_category`` method retrieves announcements filtered by specific cate
 
 .. code-block:: python
 
-    from django_announcement.models import Announcement
+    from django_announcement.models import Announcement, AnnouncementCategory
 
-
+    categories = AnnouncementCategory.objects.filter(id__in=[1, 2])
     Announcement.objects.get_by_category(categories)
 
 **Arguments:**
@@ -512,7 +520,9 @@ To retrieve announcements for a specific category:
 
 .. code-block:: python
 
-    specific_category = Category.objects.get(id=2)
+    from django_announcement.models import Announcement, AnnouncementCategory
+
+    specific_category = AnnouncementCategory.objects.get(id=2)
     category_announcements = Announcement.objects.get_by_category(specific_category)
 
 

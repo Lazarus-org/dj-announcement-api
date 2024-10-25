@@ -144,7 +144,7 @@ Now, you can create announcements using the Django admin interface.
 Once saved, your announcements will be available to the users assigned to the relevant audiences.
 
 
-8. Verify Notifications
+8. Verify Announcements
 -----------------------
 
 Once announcements are created, they can be viewed through the API endpoints. To test and verify the creation, make a request to the relevant endpoint, for example:
