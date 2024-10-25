@@ -16,6 +16,7 @@ from django_announcement.mixins.models.timestamped_model import TimeStampedModel
 from django_announcement.repository.manager.announcement import (
     AnnouncementDataAccessLayer,
 )
+from django_announcement.settings.conf import config
 
 
 class Announcement(TimeStampedModel):
@@ -89,7 +90,8 @@ class Announcement(TimeStampedModel):
         verbose_name=_("Attachment"),
         help_text=_("An optional file attachment for the announcement (e.g., flyer)."),
         db_comment="Optional file attachment related to the announcement.",
-        upload_to="announcement_attachments/",
+        upload_to=config.attachment_upload_path,
+        validators=config.attachment_validators or [],
         blank=True,
         null=True,
     )

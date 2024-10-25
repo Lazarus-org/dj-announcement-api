@@ -31,9 +31,9 @@ class AnnouncementAdmin(BaseModelAdmin):
         (
             None,
             {
-                "fields": ("title", "content", "category"),
+                "fields": ("title", "content", "category", "attachment"),
                 "description": _(
-                    "Primary fields related to the announcement, including the title, content, and category."
+                    "Primary fields related to the announcement, including the title, content, category and attachment."
                 ),
             },
         ),

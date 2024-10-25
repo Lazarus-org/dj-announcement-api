@@ -7,8 +7,8 @@ from django_announcement.tests.constants import PYTHON_VERSION, PYTHON_VERSION_R
 from django_announcement.validators.config_validators import (
     validate_boolean_setting,
     validate_list_fields,
-    validate_optional_class_setting,
-    validate_optional_classes_setting,
+    validate_optional_path_setting,
+    validate_optional_paths_setting,
     validate_throttle_rate,
 )
 
@@ -200,10 +200,9 @@ class TestValidateOptionalClassSetting:
             The result should have no errors.
         """
         with patch("django.utils.module_loading.import_string"):
-            errors = validate_optional_class_setting(
+            errors = validate_optional_path_setting(
                 "django_announcement.api.throttlings.role_base_throttle.RoleBasedUserRateThrottle",
-                "SOME_CLASS_SETTING",
-            )
+                "SOME_CLASS_SETTING")
             assert not errors
 
     def test_invalid_class_import(self) -> None:
@@ -221,9 +220,7 @@ class TestValidateOptionalClassSetting:
         with patch(
             "django.utils.module_loading.import_string", side_effect=ImportError
         ):
-            errors = validate_optional_class_setting(
-                "invalid.path.ClassName", "SOME_CLASS_SETTING"
-            )
+            errors = validate_optional_path_setting("invalid.path.ClassName", "SOME_CLASS_SETTING")
             assert len(errors) == 1
             assert errors[0].id == "django_announcement.E010_SOME_CLASS_SETTING"
 
@@ -239,7 +236,7 @@ class TestValidateOptionalClassSetting:
         -------
             The result should contain one error with the expected error ID for non-string class paths.
         """
-        errors = validate_optional_class_setting(12345, "SOME_CLASS_SETTING")  # type: ignore
+        errors = validate_optional_path_setting(12345, "SOME_CLASS_SETTING")  # type: ignore
         assert len(errors) == 1
         assert errors[0].id == "django_announcement.E009_SOME_CLASS_SETTING"
 
@@ -255,7 +252,7 @@ class TestValidateOptionalClassSetting:
         -------
             The result should have no errors.
         """
-        errors = validate_optional_class_setting(None, "SOME_CLASS_SETTING")  # type: ignore
+        errors = validate_optional_path_setting(None, "SOME_CLASS_SETTING")  # type: ignore
         assert not errors
 
     def test_invalid_list_args_classes_import(self) -> None:
@@ -270,9 +267,7 @@ class TestValidateOptionalClassSetting:
         -------
             The result should contain errors for each invalid class path with the expected error ID.
         """
-        errors = validate_optional_classes_setting(
-            [1, 5], "SOME_CLASS_SETTING"  # type: ignore
-        )
+        errors = validate_optional_paths_setting([1, 5], "SOME_CLASS_SETTING")
         assert len(errors) == 2
         assert errors[0].id == "django_announcement.E012_SOME_CLASS_SETTING"
 
@@ -291,8 +286,6 @@ class TestValidateOptionalClassSetting:
         with patch(
             "django.utils.module_loading.import_string", side_effect=ImportError
         ):
-            errors = validate_optional_classes_setting(
-                ["INVALID_PATH"], "SOME_CLASS_SETTING"
-            )
+            errors = validate_optional_paths_setting(["INVALID_PATH"], "SOME_CLASS_SETTING")
             assert len(errors) == 1
             assert errors[0].id == "django_announcement.E013_SOME_CLASS_SETTING"

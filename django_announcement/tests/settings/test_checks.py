@@ -39,6 +39,8 @@ class TestCheckNotificationSettings:
         mock_config.exclude_serializer_empty_fields = True
         mock_config.api_allow_list = True
         mock_config.api_allow_retrieve = False
+        mock_config.attachment_upload_path = "test_path/"
+        mock_config.attachment_validators = []
         mock_config.api_ordering_fields = ["created_at"]
         mock_config.api_search_fields = ["id"]
         mock_config.staff_user_throttle_rate = "10/minute"
@@ -81,6 +83,8 @@ class TestCheckNotificationSettings:
         mock_config.authenticated_user_throttle_rate = "5/minute"
         mock_config.api_allow_list = "not_boolean"
         mock_config.api_allow_retrieve = "not_boolean"
+        mock_config.attachment_upload_path = "test_path/"
+        mock_config.attachment_validators = []
         mock_config.generate_audiences_exclude_apps = []
         mock_config.generate_audiences_exclude_models = []
         mock_config.get_setting.side_effect = lambda name, default: None
@@ -160,6 +164,8 @@ class TestCheckNotificationSettings:
         mock_config.api_allow_list = True
         mock_config.api_allow_retrieve = False
         mock_config.api_ordering_fields = []
+        mock_config.attachment_upload_path = "test_path/"
+        mock_config.attachment_validators = []
         mock_config.staff_user_throttle_rate = "10/minute"
         mock_config.authenticated_user_throttle_rate = "5/minute"
         mock_config.generate_audiences_exclude_apps = None
@@ -213,6 +219,8 @@ class TestCheckNotificationSettings:
         mock_config.exclude_serializer_empty_fields = True
         mock_config.api_allow_list = True
         mock_config.api_allow_retrieve = False
+        mock_config.attachment_upload_path = "test_path/"
+        mock_config.attachment_validators = []
         mock_config.api_ordering_fields = ["created_at"]
         mock_config.api_search_fields = ["id"]
         mock_config.staff_user_throttle_rate = "invalid_rate"
@@ -229,19 +237,19 @@ class TestCheckNotificationSettings:
         assert errors[1].id == "django_announcement.E007"
 
     @patch("django_announcement.settings.checks.config")
-    def test_invalid_class_import(self, mock_config: MagicMock) -> None:
+    def test_invalid_path_import(self, mock_config: MagicMock) -> None:
         """
-        Test that invalid class import settings return errors.
+        Test that invalid path import settings return errors.
 
         Args:
         ----
-            mock_config (MagicMock): Mocked configuration object with invalid class paths.
+            mock_config (MagicMock): Mocked configuration object with invalid paths.
 
         Asserts:
         -------
-            Seven errors are returned for invalid class imports.
+            Seven errors are returned for invalid path imports.
         """
-        # Mock the config values with invalid class paths
+        # Mock the config values with invalid paths
         mock_config.admin_has_add_permission = False
         mock_config.admin_has_change_permission = False
         mock_config.admin_has_delete_permission = False
@@ -259,35 +267,45 @@ class TestCheckNotificationSettings:
         mock_config.authenticated_user_throttle_rate = "5/minute"
         mock_config.generate_audiences_exclude_apps = []
         mock_config.generate_audiences_exclude_models = []
+        mock_config.attachment_upload_path = []  # invalid,should be str
         mock_config.get_setting.side_effect = (
             lambda name, default: "invalid.path.ClassName"
         )
 
         errors = check_announcement_settings(None)
 
-        # Expect 6 errors for invalid class imports
-        assert len(errors) == 6
+        # Expect 8 errors for invalid path imports
+        assert len(errors) == 8
+
         assert (
-            errors[0].id
-            == f"django_announcement.E010_{mock_config.prefix}API_THROTTLE_CLASS"
+                errors[0].id
+                == f"django_announcement.E014_{mock_config.prefix}ATTACHMENT_UPLOAD_PATH"
         )
         assert (
             errors[1].id
-            == f"django_announcement.E010_{mock_config.prefix}API_PAGINATION_CLASS"
+            == f"django_announcement.E010_{mock_config.prefix}API_THROTTLE_CLASS"
         )
         assert (
             errors[2].id
-            == f"django_announcement.E011_{mock_config.prefix}API_PARSER_CLASSES"
+            == f"django_announcement.E010_{mock_config.prefix}API_PAGINATION_CLASS"
         )
         assert (
             errors[3].id
-            == f"django_announcement.E010_{mock_config.prefix}API_FILTERSET_CLASS"
+            == f"django_announcement.E011_{mock_config.prefix}API_PARSER_CLASSES"
         )
         assert (
-            errors[4].id
-            == f"django_announcement.E010_{mock_config.prefix}API_EXTRA_PERMISSION_CLASS"
+                errors[4].id
+                == f"django_announcement.E011_{mock_config.prefix}ATTACHMENT_VALIDATORS"
         )
         assert (
             errors[5].id
+            == f"django_announcement.E010_{mock_config.prefix}API_FILTERSET_CLASS"
+        )
+        assert (
+            errors[6].id
+            == f"django_announcement.E010_{mock_config.prefix}API_EXTRA_PERMISSION_CLASS"
+        )
+        assert (
+            errors[7].id
             == f"django_announcement.E010_{mock_config.prefix}ADMIN_SITE_CLASS"
         )

@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Type, Union
+from typing import Any, List
 
 from django.conf import settings
 from django.utils.module_loading import import_string
@@ -6,11 +6,13 @@ from django.utils.module_loading import import_string
 from django_announcement.constants.default_settings import (
     DefaultAdminSettings,
     DefaultAPISettings,
+    DefaultAttachmentSettings,
     DefaultCommandSettings,
     DefaultPaginationAndFilteringSettings,
     DefaultSerializerSettings,
     DefaultThrottleSettings,
 )
+from django_announcement.constants.types import DefaultPath, OptionalPaths
 
 
 # pylint: disable=too-many-instance-attributes
@@ -56,6 +58,7 @@ class AnnouncementConfig:
     )
     default_throttle_settings: DefaultThrottleSettings = DefaultThrottleSettings()
     default_command_settings: DefaultCommandSettings = DefaultCommandSettings()
+    default_attachment_settings: DefaultAttachmentSettings = DefaultAttachmentSettings()
 
     def __init__(self) -> None:
         """Initialize the AnnouncementConfig, loading values from Django
@@ -114,6 +117,14 @@ class AnnouncementConfig:
             f"{self.prefix}GENERATE_AUDIENCES_EXCLUDE_MODELS",
             self.default_command_settings.generate_audiences_exclude_models,
         )
+        self.attachment_upload_path: str = self.get_setting(
+            f"{self.prefix}ATTACHMENT_UPLOAD_PATH",
+            self.default_attachment_settings.upload_path,
+        )
+        self.attachment_validators: OptionalPaths = self.get_optional_paths(
+            f"{self.prefix}ATTACHMENT_VALIDATORS",
+            self.default_attachment_settings.validators,
+        )
         self.authenticated_user_throttle_rate: str = self.get_setting(
             f"{self.prefix}AUTHENTICATED_USER_THROTTLE_RATE",
             self.default_throttle_settings.authenticated_user_throttle_rate,
@@ -122,25 +133,23 @@ class AnnouncementConfig:
             f"{self.prefix}STAFF_USER_THROTTLE_RATE",
             self.default_throttle_settings.staff_user_throttle_rate,
         )
-        self.api_throttle_class: Optional[Type[Any]] = self.get_optional_classes(
+        self.api_throttle_class: OptionalPaths = self.get_optional_paths(
             f"{self.prefix}API_THROTTLE_CLASS",
             self.default_throttle_settings.throttle_class,
         )
-        self.api_pagination_class: Optional[Type[Any]] = self.get_optional_classes(
+        self.api_pagination_class: OptionalPaths = self.get_optional_paths(
             f"{self.prefix}API_PAGINATION_CLASS",
             self.default_pagination_and_filter_settings.pagination_class,
         )
-        self.api_extra_permission_class: Optional[Type[Any]] = (
-            self.get_optional_classes(
-                f"{self.prefix}API_EXTRA_PERMISSION_CLASS",
-                self.default_api_settings.extra_permission_class,
-            )
+        self.api_extra_permission_class: OptionalPaths = self.get_optional_paths(
+            f"{self.prefix}API_EXTRA_PERMISSION_CLASS",
+            self.default_api_settings.extra_permission_class,
         )
-        self.api_parser_classes: Optional[List[Type[Any]]] = self.get_optional_classes(
+        self.api_parser_classes: OptionalPaths = self.get_optional_paths(
             f"{self.prefix}API_PARSER_CLASSES",
             self.default_api_settings.parser_classes,
         )
-        self.api_filterset_class: Optional[Type[Any]] = self.get_optional_classes(
+        self.api_filterset_class: OptionalPaths = self.get_optional_paths(
             f"{self.prefix}API_FILTERSET_CLASS",
             self.default_pagination_and_filter_settings.filterset_class,
         )
@@ -152,7 +161,7 @@ class AnnouncementConfig:
             f"{self.prefix}API_SEARCH_FIELDS",
             self.default_pagination_and_filter_settings.search_fields,
         )
-        self.admin_site_class: Optional[Type[Any]] = self.get_optional_classes(
+        self.admin_site_class: OptionalPaths = self.get_optional_paths(
             f"{self.prefix}ADMIN_SITE_CLASS",
             self.default_admin_settings.admin_site_class,
         )
@@ -170,39 +179,33 @@ class AnnouncementConfig:
         """
         return getattr(settings, setting_name, default_value)
 
-    def get_optional_classes(
+    def get_optional_paths(
         self,
         setting_name: str,
-        default_path: Optional[Union[str, List[str]]],
-    ) -> Optional[Union[Type[Any], List[Type[Any]]]]:
-        """Dynamically load a class based on a setting, or return None if the
-        setting is None or invalid.
+        default_path: DefaultPath,
+    ) -> OptionalPaths:
+        """Dynamically load a method or class path on a setting, or return None
+        if the setting is None or invalid.
 
         Args:
-            setting_name (str): The name of the setting for the class path.
-            default_path (Optional[Union[str, List[str]]): The default import path for the class.
+            setting_name (str): The name of the setting for the method or class path.
+            default_path (Optional[Union[str, List[str]]): The default import path for the method or class.
 
         Returns:
-            Optional[Union[Type[Any], List[Type[Any]]]]: The imported class or None
+            Optional[Union[Type[Any], List[Type[Any]]]]: The imported method or class or None
              if import fails or the path is invalid.
 
         """
-        class_path: Optional[Union[str, List[str]]] = self.get_setting(
-            setting_name, default_path
-        )
+        _path: DefaultPath = self.get_setting(setting_name, default_path)
 
-        if class_path and isinstance(class_path, str):
+        if _path and isinstance(_path, str):
             try:
-                return import_string(class_path)
+                return import_string(_path)
             except ImportError:
                 return None
-        elif class_path and isinstance(class_path, list):
+        elif _path and isinstance(_path, list):
             try:
-                return [
-                    import_string(cls_path)
-                    for cls_path in class_path
-                    if isinstance(cls_path, str)
-                ]
+                return [import_string(path) for path in _path if isinstance(path, str)]
             except ImportError:
                 return []
 
