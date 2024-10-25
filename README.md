@@ -30,6 +30,7 @@ The documentation is organized into the following sections:
 - **[Quick Start](#quick-start)**: Get up and running quickly with basic setup instructions.
 - **[API Guide](#api-guide)**: Detailed information on available APIs and endpoints.
 - **[Usage](#usage)**: How to effectively use the package in your projects.
+- **[Examples](#examples)**: Examples of how to configure some key features.
 - **[Settings](#settings)**: Configuration options and settings you can customize.
 
 
