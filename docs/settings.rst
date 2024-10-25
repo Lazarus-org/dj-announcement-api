@@ -22,6 +22,8 @@ Below is an example configuration with default values:
     DJANGO_ANNOUNCEMENT_SERIALIZER_EXCLUDE_EMPTY_FIELDS = False
     DJANGO_ANNOUNCEMENT_API_ALLOW_LIST = True
     DJANGO_ANNOUNCEMENT_API_ALLOW_RETRIEVE = True
+    DJANGO_ANNOUNCEMENT_ATTACHMENT_VALIDATORS = []
+    DJANGO_ANNOUNCEMENT_ATTACHMENT_UPLOAD_PATH = "announcement_attachments/"
     DJANGO_ANNOUNCEMENT_AUTHENTICATED_USER_THROTTLE_RATE = "30/minute"
     DJANGO_ANNOUNCEMENT_STAFF_USER_THROTTLE_RATE = "100/minute"
     DJANGO_ANNOUNCEMENT_API_THROTTLE_CLASS = (
@@ -171,6 +173,26 @@ Below is a detailed description of each setting, so you can better understand an
 **Default**: ``True``
 
 **Description**: Allows retrieving individual announcements via the API. Set to ``False`` to disable this feature.
+
+----
+
+``DJANGO_ANNOUNCEMENT_ATTACHMENT_VALIDATORS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Type**: ``list``
+
+**Default**: ``[]`` (empty list)
+
+**Description**: Allows specifying a list of additional validators for attachment files in announcements. Each validator should be passed as a Python path string, which can be dynamically loaded and applied to the attachment. For example, to add custom file size or file type validation, include paths to custom validator functions or classes.
+
+----
+
+``DJANGO_ANNOUNCEMENT_ATTACHMENT_UPLOAD_PATH``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Type**: ``str``
+
+**Default**: ``"announcement_attachments/"``
+
+**Description**: Specifies the upload path for attachment files in announcements.
 
 ----
 
@@ -337,4 +359,5 @@ These are all fields that are available for searching, ordering, and filtering i
 - ``published_at``: The scheduled publication time of the announcement (filterable).
 - ``expires_at``: The expiration time of the announcement (filterable).
 
-**Note**: Exercise caution when modifying search and ordering fields. **Avoid** using foreign key or joined fields (``audience``, ``category``) directly in **search fields**, as this may result in errors. if you want to use them, you should access their fields like: ``category__name``.
+.. note::
+  Exercise caution when modifying search and ordering fields. **Avoid** using foreign key or joined fields (``audience``, ``category``) directly in **search fields**, as this may result in errors. if you want to use them, you should access their fields like: ``category__name``.

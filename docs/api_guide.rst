@@ -101,10 +101,10 @@ This response is returned when ``DJANGO_ANNOUNCEMENT_SERIALIZER_INCLUDE_FULL_DET
 
 .. note::
 
- you can exclude Any fields with a ``null`` value in the response output by adding this config in your ``settings.py``:
+ you can exclude Any fields with empty value in the response output by adding this config in your ``settings.py``:
 .. code-block:: python
 
-   DJANGO_ANNOUNCEMENT_SERIALIZER_EXCLUDE_NULL_FIELDS = True
+   DJANGO_ANNOUNCEMENT_SERIALIZER_EXCLUDE_EMPTY_FIELDS = True
 
 Throttling
 ----------
