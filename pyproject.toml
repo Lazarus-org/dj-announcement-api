@@ -4,8 +4,8 @@ requires = [ "poetry-core" ]
 
 [tool.poetry]
 name = "dj-announcement-api"
-version = "0.1.0"
-description = ""
+version = "1.0.0"
+description = "A Django package developed by Lazarus for efficiently handling announcements through various APIs"
 authors = [ "ARYAN-NIKNEZHAD <aryan513966@gmail.com>", "MEHRSHAD-MIRSHEKARY <mehrshad_mirshekary@email.com>" ]
 license = "MIT"
 readme = "README.md"
