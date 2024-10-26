@@ -674,3 +674,7 @@ If no related users are found or if audiences are missing, you would see:
 
    No users found related to the provided models.
    No valid audiences found. Please run 'generate_audiences' first. Exiting...
+
+.. note::
+
+  Refer to the :doc:`Examples <examples>` section for detailed approaches to automating the assignment of new users to appropriate audiences.

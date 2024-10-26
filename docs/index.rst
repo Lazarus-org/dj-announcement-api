@@ -85,6 +85,7 @@ The documentation is organized into the following sections:
    api_guide
    usage
    settings
+   examples
    roles
    contributing
 
